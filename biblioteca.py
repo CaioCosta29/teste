@@ -2,7 +2,7 @@ class LivroCRUD:
     def cadastrarLivro(self, titulo, autor, genero, quantidade):
 
         with open("cadastro_livro.txt", "a") as cad:
-            cad.write(f"{titulo}&&{autor}&&{genero}&&{quantidade}\n")
+            cad.write(f"{titulo}&&{autor}&&{genero}&&{quantidade}&&\n")
 
     def cadastrarLivros(self, livros):
         with open("cadastro_livro.txt", "w") as cad:
@@ -30,18 +30,23 @@ class LivroCRUD:
     
     def atualizarLivro(self, id_title, id_autor, title, autor, genero, quantidade): #problem aqui
         livros = self.visualizarLivros()
-        print(livros)
+        encontrado = False
         for linha in livros:
-            print(linha)
             if f"{id_title}, {id_autor}" in f"{linha[0]}, {linha[1]}":
+                encontrado = True
                 linha[0] = title
                 linha[1] = autor
                 linha[2] = genero
                 linha[3] = quantidade
-        
-        self.cadastrarLivros(livros)
+                break
 
-    def excluirLivro(self, titulo, autor):
+        if encontrado:
+            self.cadastrarLivros(livros)
+            return "Livro encontrado"
+        else:
+            return "Livro não encontrado"
+
+    def excluirLivro(self, titulo, autor): #concluido
         livros = self.visualizarLivros()
 
         for linha in livros:
@@ -51,15 +56,16 @@ class LivroCRUD:
         self.cadastrarLivros(livros)
 
 class LeitorCRUD:    
-    def cadastrarLeitor(self, nome="", idade=0, endereco=""): #concluido
+    def cadastrarLeitor(self, nome="", idade=0, endereco=""): 
         with open("cadastro_leitor.txt", "a") as cad:
-            cad.write(f"{nome}&&{idade}&&{endereco}\n")
+            cad.write(f"{nome}&&{idade}&&{endereco}&&\n")
 
     def cadastrarLeitores(self, leitores=[]): #concluido
         with open("cadastro_leitor.txt", "w") as cad:
             cad.write("")
         
         for leitor in leitores:
+            print(leitor)
             print(leitor[0])
             print(leitor[1])
             print(leitor[2])
@@ -73,33 +79,38 @@ class LeitorCRUD:
                 result.append(leitor.split("&&"))   
         return result
 
-    def visualizarLeitor(self, nome): #concluido
+    def visualizarLeitor(self, nome):
         leitores = self.visualizarLeitores()
         
         for linha in leitores:
             #leitorSeparado = linha.split()
             if f"{nome}" in linha[0]:
-                
                 return linha
 
-    def atualizarLeitor(self, id_nome, nome, idade, endereco): #problema aqui
+    def atualizarLeitor(self, id_nome, nome, idade, endereco):
+        encontrado = False
         leitores = self.visualizarLeitores()
+        
         
         for linha in leitores:
             if f"{id_nome}" in linha[0]:
+                encontrado = True
                 linha[0] = nome
                 linha[1] = idade
                 linha[2] = endereco
-                
-            
+                break
         
-        self.cadastrarLeitores(leitores)
+        if encontrado:
+            self.cadastrarLeitores(leitores)
+            return "Leitor atualizado"
+        else:
+            return "Leitor não encontrado. Impossível atualizar"
 
-    def excluirLeitor(self, nome, sobrenome):
+    def excluirLeitor(self, nome):
         leitores = self.visualizarLeitores()
         
         for linha in leitores:
-            if f"{nome} {sobrenome}" in linha[0]:
+            if f"{nome}" in linha[0]:
                 leitores.remove(linha)
         
         self.cadastrarLeitores(leitores)
@@ -112,7 +123,7 @@ class EmprestimoCRUD:
         
 
 
-    def emprestarLivro(self, titulo, autor, nome, sobrenome):
+    def emprestarLivro(self, titulo, autor, nome):
         livros = self.livroControle.visualizarLivros()
         leitores = self.leitorControle.visualizarLeitores()
 
@@ -122,7 +133,7 @@ class EmprestimoCRUD:
 
 
         for item in leitores:
-            if f"{nome} {sobrenome}" in item:
+            if f"{nome}" in item:
                 
                 verificarLeitor = True
 
@@ -136,17 +147,12 @@ class EmprestimoCRUD:
                 if f"{titulo}, {autor}" in f"{linha[0]}, {linha[1]}":
                     linha[3] = int(linha[3]) - 1
                     
-            
-
             self.livroControle.cadastrarLivros(livros)
-
-            with open("emprestimo_livro.txt", "a") as cad:
-                cad.write(f"{nome} {sobrenome}&&{titulo}&&{autor}\n")
-
+            self.cadastrarEmprestimo(nome, titulo, autor)
 
     def cadastrarEmprestimo(self, nomeCompleto, titulo, autor):
         with open("emprestimo_livro.txt", "a") as cad:
-            cad.write(f"{nomeCompleto}&&{titulo}&&{autor}")
+            cad.write(f"{nomeCompleto}&&{titulo}&&{autor}&&\n")
 
         
     def cadastrarEmprestimos(self, emprestimos=[]):
@@ -165,7 +171,7 @@ class EmprestimoCRUD:
             return result
         
 
-    def devolverLivro(self, nome, sobrenome, titulo, autor):
+    def devolverLivro(self, nome, titulo, autor):
         livros = self.livroControle.visualizarLivros()
 
 
@@ -175,10 +181,9 @@ class EmprestimoCRUD:
 
         for item in listaEmprestimo: #excluir do arquivo txt
             
-            if f"{nome} {sobrenome}" in f"{item[0]}" and f"{titulo}" in f"{item[1]}":
-                print(listaEmprestimo)
+            if f"{nome}" in f"{item[0]}" and f"{titulo}" in f"{item[1]}":
                 listaEmprestimo.remove(item)
-                print(listaEmprestimo)
+                
 
                 self.cadastrarEmprestimos(listaEmprestimo)
 
@@ -193,10 +198,10 @@ class EmprestimoCRUD:
                 
 
         
-    def visualizarDetalhesDoLivroEmprestado(self, nome, sobrenome, titulo):
+    def visualizarDetalhesDoLivroEmprestado(self, nome, titulo, autor):
         emprestimo = self.visualizarEmprestimos()
 
         for linha in emprestimo:
             #emprestimoSeparado = linha.split("&&")
-            if f"{nome} {sobrenome}" in linha[0]:
+            if f"{nome}" in linha[0] and f"{titulo}, {autor}" in f"{linha[1]}, {linha[2]}":
                 return linha

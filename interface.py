@@ -1,4 +1,5 @@
 import biblioteca
+import os
 
 
 def palavrasMaiuculas(txt): # Deixar todas as palavras maiusculas
@@ -13,17 +14,24 @@ def palavrasMaiuculas(txt): # Deixar todas as palavras maiusculas
 
 while True:
 
-
-    
-    escolha = input("""Bem vindos a biblioteca do Caio Costa!\nSe deseja entrar na area do leitor digite '1'\nSe deseja na area dos livros digite '2'\nSe deseja entrar na area de emprestar/devolver livro digite '3'\nSe deseja encerrar o programa digite '4'\n""")
+    print("""--------MENU--------
+Bem vindos a biblioteca do Caio Costa!
+Se deseja entrar na area do leitor digite '1'
+Se deseja na area dos livros digite '2'
+Se deseja entrar na area de emprestar/devolver livro digite '3'
+Se deseja encerrar o programa digite '4'""")
+    escolha = input()
+    os.system('cls')
     match escolha:
+
         case '1': #Leitor
-             
-            escolhaLeitor = input("""Se quiser cadastrar um leitor digite '1'
+            print("""--------LEITORES--------
+Se quiser cadastrar um leitor digite '1'
 Se deseja visualizar um leitor digite '2'
 Se deseja visualizar todos os leitores digite '3'
 Se deseja atualizar um leitor digite '4'
-Se deseja deletar um leitor digite '5'\n""")
+Se deseja deletar um leitor digite '5'""")
+            escolhaLeitor = input()
             match escolhaLeitor:
                 case '1': #Cadastrar/CONCLUIDO
                     
@@ -92,24 +100,25 @@ Se deseja deletar um leitor digite '5'\n""")
                     
 
                     c = biblioteca.LeitorCRUD()
-                    c.atualizarLeitor(id_nome, nomeAtualizar, idadeAtualizar, enderecoAtualizar)
-                    
+                    res = c.atualizarLeitor(id_nome, nomeAtualizar, idadeAtualizar, enderecoAtualizar)
+                    print(res)
 
                 case '5': #Apagar
                     nomeApagar = input("Digite o nome: ")
-                    sobrenomeApagar = input("Digite o sobrenome: ") 
-
-                    c = biblioteca.LeitorCRUD()
-                    c.excluirLeitor(nomeApagar, sobrenomeApagar)
                     
-
+                    c = biblioteca.LeitorCRUD()
+                    c.excluirLeitor(nomeApagar)
+                    
+            input('Press ENTER to continue...')
+            os.system('cls')
         case '2': #Livro
-            
-            escolhaLivro = input("""Se quiser cadastrar um livro digite '1'
+            print("""--------LIVROS--------
+Se quiser cadastrar um livro digite '1'
 Se deseja visualizar um livro digite '2'
 Se deseja visualizar todos os livros digite '3'
 Se deseja atualizar um livro digite '4'
 Se deseja deletar um livro digite '5'""")
+            escolhaLivro = input()
             match escolhaLivro:
                 case '1': #Cadastrar
                     
@@ -163,33 +172,49 @@ Se deseja deletar um livro digite '5'""")
 
                     a = biblioteca.LivroCRUD()
                     a.excluirLivro(tituloExcluir, autorExcluir)
+        
+            input('Press ENTER to continue...')
+            os.system('cls')
         case '3': #Emprestimo/Devolver
-            escolha = input("Digite 1 para emprestimo\nDigite 2 para devolver:  ")
+            print("""--------EMPRÉSTIMO--------
+Digite 1 para emprestimo
+Digite 2 para devolver
+Digite '3' para visualizar todos os emprestimos
+Digite '4' para visualizar um emprestimo especifico""")
+            escolha = input()
 
             match escolha:
                 case '1': #Emprestimo
                     emprestimoTitulo = input(('Titulo: '))
                     emprestimoAutor = input(("Autor: "))
                     emprestimoNome = input(("Nome: "))
-                    emprestimoSobrenome = input(("Sobrenome: "))                    
+                                     
 
                     x = biblioteca.EmprestimoCRUD()
-                    x.emprestarLivro(emprestimoTitulo, emprestimoAutor, emprestimoNome, emprestimoSobrenome)
+                    x.emprestarLivro(emprestimoTitulo, emprestimoAutor, emprestimoNome)
 
                 case '2': #Devolver
                     nomeDevolver = input("Digite o nome: ")
-                    sobrenomeDevolver = input("Digite o sobrenome: ")
                     tituloDevolver = input("Digite o titulo: ")
                     autorDevolver = input("Digite o autor: ")
 
                     x = biblioteca.EmprestimoCRUD()
-                    x.devolverLivro(nomeDevolver, sobrenomeDevolver, tituloDevolver, autorDevolver)
+                    x.devolverLivro(nomeDevolver, tituloDevolver, autorDevolver)
                 
-                #case '3': #visualizar
-                    #x = biblioteca.EmprestimoCRUD()
-                    #x.visualizarEmprestimos()
+                case '3': #visualizar
+                    x = biblioteca.EmprestimoCRUD()
+                    print(x.visualizarEmprestimos())
 
+                case '4':
+                    nomeVisualizarEmprestimo = input("Digite o nome: ")
+                    tituloVisualizarEmprestimo = input("Digite o titulo: ")
+                    autorVisualizarEmprestimo = input("Digite o autor: ")
 
+                    x = biblioteca.EmprestimoCRUD()
+                    print(x.visualizarDetalhesDoLivroEmprestado(nomeVisualizarEmprestimo, tituloVisualizarEmprestimo, autorVisualizarEmprestimo))
+
+            input('Press ENTER to continue...')
+            os.system('cls')
             
 
         case '4': #Parar o programa

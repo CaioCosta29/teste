@@ -2,7 +2,7 @@ class LivroCRUD:
     def cadastrarLivro(self, titulo, autor, genero, quantidade):
 
         with open("cadastro_livro.txt", "a") as cad:
-            cad.write(f"{titulo}&&{autor}&&{genero}&&{quantidade}&&\n")
+            cad.write(f"{titulo}&&{autor}&&{genero}&&{quantidade}\n")
 
     def cadastrarLivros(self, livros):
         with open("cadastro_livro.txt", "w") as cad:
@@ -17,20 +17,22 @@ class LivroCRUD:
             livros = cad.readlines()
             for livro in livros:
                 result.append(livro.split("&&"))
+            
             return result
         
     def visualizarLivro(self, titulo, autor):
-       livros = self.visualizarLivros
+       livros = self.visualizarLivros()
 
        for linha in livros:
-           livroSeparado = linha.split("&&")
-           if f"{titulo}, {autor}" in f"{livroSeparado[0]}, {livroSeparado[1]}":
-               return livroSeparado
+           #livroSeparado = linha.split("&&")
+           if f"{titulo}, {autor}" in f"{linha[0]}, {linha[1]}":
+               return linha
     
-    def atualizarLivro(self, id_title, id_autor, title, autor, genero, quantidade):
-        livros = self.visualizarLivros
-
+    def atualizarLivro(self, id_title, id_autor, title, autor, genero, quantidade): #problem aqui
+        livros = self.visualizarLivros()
+        print(livros)
         for linha in livros:
+            print(linha)
             if f"{id_title}, {id_autor}" in f"{linha[0]}, {linha[1]}":
                 linha[0] = title
                 linha[1] = autor
@@ -49,41 +51,48 @@ class LivroCRUD:
         self.cadastrarLivros(livros)
 
 class LeitorCRUD:    
-    def cadastrarLeitor(self, nome="", sobrenome="", idade=0, endereco=""):
+    def cadastrarLeitor(self, nome="", idade=0, endereco=""): #concluido
         with open("cadastro_leitor.txt", "a") as cad:
-            cad.write(f"{nome} {sobrenome}&&{idade}&&{endereco}\n")
+            cad.write(f"{nome}&&{idade}&&{endereco}\n")
 
-    def cadastrarLeitores(self, leitores=[]):
+    def cadastrarLeitores(self, leitores=[]): #concluido
         with open("cadastro_leitor.txt", "w") as cad:
             cad.write("")
         
         for leitor in leitores:
+            print(leitor[0])
+            print(leitor[1])
+            print(leitor[2])
             self.cadastrarLeitor(leitor[0], leitor[1], leitor[2])
 
-    def visualizarLeitores(self):
+    def visualizarLeitores(self): #concluido
         result = []
         with open("cadastro_leitor.txt", "r") as cad:
             leitores = cad.readlines()
             for leitor in leitores:
-                result.append( leitor.split("&&") )
+                result.append(leitor.split("&&"))   
         return result
 
-    def visualizarLeitor(self, nome, sobrenome):
-        leitores = self.visualizarLeitores()
-
-        for linha in leitores:
-            leitorSeparado = linha.split("&&")
-            if f"{nome} {sobrenome}" in leitorSeparado[0]:
-                return leitorSeparado
-
-    def atualizarLeitor(self, nome, sobrenome, idade, endereco):
+    def visualizarLeitor(self, nome): #concluido
         leitores = self.visualizarLeitores()
         
         for linha in leitores:
-            if f"{nome} {sobrenome}" in linha[0]:
+            #leitorSeparado = linha.split()
+            if f"{nome}" in linha[0]:
+                
+                return linha
+
+    def atualizarLeitor(self, id_nome, nome, idade, endereco): #problema aqui
+        leitores = self.visualizarLeitores()
+        
+        for linha in leitores:
+            if f"{id_nome}" in linha[0]:
+                linha[0] = nome
                 linha[1] = idade
                 linha[2] = endereco
-
+                
+            
+        
         self.cadastrarLeitores(leitores)
 
     def excluirLeitor(self, nome, sobrenome):
@@ -92,7 +101,7 @@ class LeitorCRUD:
         for linha in leitores:
             if f"{nome} {sobrenome}" in linha[0]:
                 leitores.remove(linha)
-
+        
         self.cadastrarLeitores(leitores)
 
 
@@ -146,16 +155,7 @@ class EmprestimoCRUD:
             
             for emprestimo in emprestimos:
                 self.cadastrarEmprestimo(emprestimo[0], emprestimo[1], emprestimo[2])
-    """  
-    def removerEmprestimo():
-        listaEmprestimo = self.visualizarEmprestimos()
-
-        for item in listaEmprestimo:
-            if f"{nome} {sobrenome}" in f"{item[0]}" and f"{titulo}" in f"{item[1]}":
-                listaEmprestimo.remove(item)
-        pass
-    """
-
+    
     def visualizarEmprestimos(self):
         result = []
         with open("emprestimo_livro.txt", "r") as cad:
@@ -193,18 +193,10 @@ class EmprestimoCRUD:
                 
 
         
+    def visualizarDetalhesDoLivroEmprestado(self, nome, sobrenome, titulo):
+        emprestimo = self.visualizarEmprestimos()
 
-        
-
-
-                
-
-
-
-        
-
-
-    
-
-    def visualizarDetalhesDoLivroEmprestado(self):
-        pass
+        for linha in emprestimo:
+            #emprestimoSeparado = linha.split("&&")
+            if f"{nome} {sobrenome}" in linha[0]:
+                return linha

@@ -1,5 +1,5 @@
 import biblioteca
-import os
+
 
 def palavrasMaiuculas(txt): # Deixar todas as palavras maiusculas
     newTxt = ''
@@ -18,24 +18,21 @@ while True:
     escolha = input("""Bem vindos a biblioteca do Caio Costa!\nSe deseja entrar na area do leitor digite '1'\nSe deseja na area dos livros digite '2'\nSe deseja entrar na area de emprestar/devolver livro digite '3'\nSe deseja encerrar o programa digite '4'\n""")
     match escolha:
         case '1': #Leitor
-            os.system('cls') 
+             
             escolhaLeitor = input("""Se quiser cadastrar um leitor digite '1'
 Se deseja visualizar um leitor digite '2'
 Se deseja visualizar todos os leitores digite '3'
 Se deseja atualizar um leitor digite '4'
 Se deseja deletar um leitor digite '5'\n""")
             match escolhaLeitor:
-                case '1': #Cadastrar
-                    os.system('cls')
+                case '1': #Cadastrar/CONCLUIDO
+                    
                     enderecoLeitor = list()
 
-                    nomeLeitor = input('Digite seu nome: ').capitalize()
+                    nomeLeitor = input('Digite seu nome: ')
+                    nomeLeitor = palavrasMaiuculas(nomeLeitor)
 
-                    sobrenomeLeitor = input('Digite seu sobrenome: ')
-                    sobrenomeLeitor = palavrasMaiuculas(sobrenomeLeitor)
                     
-                   
-
                     idadeLeitor = input('Digite sua idade: ')
 
                     ruaLeitor = input('Sua rua: ')
@@ -46,34 +43,56 @@ Se deseja deletar um leitor digite '5'\n""")
                     bairroLeitor = input('Seu bairro: ')
                     bairroLeitor = palavrasMaiuculas(bairroLeitor)
 
-                    os.system('cls')
+                    
                     enderecoLeitor.append(ruaLeitor)
                     enderecoLeitor.append(numeroRuaLeitor)
                     enderecoLeitor.append(bairroLeitor)
                     
                     c = biblioteca.LeitorCRUD()
-                    c.cadastrarLeitor(nomeLeitor, sobrenomeLeitor, idadeLeitor, enderecoLeitor)
+                    c.cadastrarLeitor(nomeLeitor, idadeLeitor, enderecoLeitor)
 
-                case '2': #VisualizarLeitor
-                    os.system('cls')
-                    visualizarLeitorNome = input('Digite o nome do leitor: ').capitalize()
+                case '2': #VisualizarLeitor/CONCLUIDO
                     
-                    visualizarLeitorSobrenome = input('Digite o sobrenome: ')
-                    visualizarLeitorSobrenome = palavrasMaiuculas(visualizarLeitorSobrenome)
+                    visualizarLeitorNome = input('Digite o nome do leitor: ')
+                    visualizarLeitorNome = palavrasMaiuculas(visualizarLeitorNome)
 
-                    
                     
                     c = biblioteca.LeitorCRUD()
-                    c.visualizarLeitor(visualizarLeitorNome, visualizarLeitorSobrenome)
+                    print(c.visualizarLeitor(visualizarLeitorNome))
                 
-                case '3': #VisualizzarLeitores
-                    os.system('cls')
+                case '3': #VisualizzarLeitores/CONCLUIDO
+                    
                     c = biblioteca.LeitorCRUD()
-                    c.visualizarLeitores()
+                    print(c.visualizarLeitores())
                 
                 case '4': #Atualizar
+                    id_nome = input("Digite o nome do leitor que deseja modificar: ")
+                    id_nome = palavrasMaiuculas(id_nome)
+
+                    nomeAtualizar = input("nome: ")
+                    nomeAtualizar = palavrasMaiuculas(nomeAtualizar)
+                    
+                    idadeAtualizar = input("Idade: ")
+
+                    enderecoAtualizar = []
+
+                    ruaAtualizar = input('Sua rua: ')
+                    ruaAtualizar = palavrasMaiuculas(ruaAtualizar)
+
+                    numeroRuaAtualizar = input('Numero da sua residencia: ')
+
+                    bairroAtualizar = input('Seu bairro: ')
+                    bairroAtualizar = palavrasMaiuculas(bairroAtualizar)
+
+                    
+                    enderecoAtualizar.append(ruaAtualizar)
+                    enderecoAtualizar.append(numeroRuaAtualizar)
+                    enderecoAtualizar.append(bairroAtualizar)
+
+                    
+
                     c = biblioteca.LeitorCRUD()
-                    c.atualizarLeitor()
+                    c.atualizarLeitor(id_nome, nomeAtualizar, idadeAtualizar, enderecoAtualizar)
                     
 
                 case '5': #Apagar
@@ -82,10 +101,10 @@ Se deseja deletar um leitor digite '5'\n""")
 
                     c = biblioteca.LeitorCRUD()
                     c.excluirLeitor(nomeApagar, sobrenomeApagar)
-                    pass
+                    
 
         case '2': #Livro
-            os.system('cls')
+            
             escolhaLivro = input("""Se quiser cadastrar um livro digite '1'
 Se deseja visualizar um livro digite '2'
 Se deseja visualizar todos os livros digite '3'
@@ -93,7 +112,7 @@ Se deseja atualizar um livro digite '4'
 Se deseja deletar um livro digite '5'""")
             match escolhaLivro:
                 case '1': #Cadastrar
-                    os.system('cls')
+                    
                     livroTitulo = input('Titulo do livro: ')
                     livroTitulo = palavrasMaiuculas(livroTitulo)
                     
@@ -110,7 +129,7 @@ Se deseja deletar um livro digite '5'""")
                     a.cadastrarLivro(livroTitulo, livroAutor, livroGenero, livroQuantidade)
 
                 case '2': #VisualizarLivro
-                    os.system('cls')
+                    
                     verificarTitulo = input('Digite o titulo do livro: ')
                     verificarTitulo = palavrasMaiuculas(verificarTitulo)
 
@@ -121,20 +140,29 @@ Se deseja deletar um livro digite '5'""")
                     a.visualizarLivro(verificarTitulo, verificarAutor)
                     
                 case '3': #VisualizarLivros
-                    os.system('cls')
+                    
                     a = biblioteca.LivroCRUD()
                     a.visualizarLivros()
                 
                 case '4': #Atualizar
+                    id_title = input("Digite o titulo do livro que deseja modificar: ")
+                    id_autor = input(f"Digite o nome do autor de {id_title}")
+
+                    print("Agora para modificar")
+                    tituloAtualizar = input("Titulo: ")
+                    autorAtualizar = input("Autor: ")
+                    generoAtualizar = input("Genero: ")
+                    quantidadeAtualizar = input("Quantidade: ")
+
                     a = biblioteca.LivroCRUD()
-                    a.atualizarLivro
+                    a.atualizarLivro(id_title, id_autor, tituloAtualizar, autorAtualizar, generoAtualizar, quantidadeAtualizar)
 
                 case '5': #Apagar
-                    
+                    tituloExcluir = input("titulo: ")
+                    autorExcluir = input("autor: ")
 
-                    a = biblioteca.LeitorCRUD()
-                    a.excluirLeitor()
-
+                    a = biblioteca.LivroCRUD()
+                    a.excluirLivro(tituloExcluir, autorExcluir)
         case '3': #Emprestimo/Devolver
             escolha = input("Digite 1 para emprestimo\nDigite 2 para devolver:  ")
 
@@ -154,9 +182,14 @@ Se deseja deletar um livro digite '5'""")
                     tituloDevolver = input("Digite o titulo: ")
                     autorDevolver = input("Digite o autor: ")
 
-
                     x = biblioteca.EmprestimoCRUD()
                     x.devolverLivro(nomeDevolver, sobrenomeDevolver, tituloDevolver, autorDevolver)
+                
+                #case '3': #visualizar
+                    #x = biblioteca.EmprestimoCRUD()
+                    #x.visualizarEmprestimos()
+
+
             
 
         case '4': #Parar o programa

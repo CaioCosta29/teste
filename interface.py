@@ -11,7 +11,7 @@ def palavrasMaiuculas(txt): # Deixar todas as palavras maiusculas
         tamanhoPalava = len(newTxt)
         textoFinal = newTxt[0:tamanhoPalava - 1]
     return textoFinal
-
+os.system('cls')
 while True:
 
     print("""--------MENU--------
@@ -35,7 +35,7 @@ Se deseja deletar um leitor digite '5'""")
             match escolhaLeitor:
                 case '1': #Cadastrar/CONCLUIDO
                     
-                    enderecoLeitor = list()
+                    
 
                     nomeLeitor = input('Digite seu nome: ')
                     nomeLeitor = palavrasMaiuculas(nomeLeitor)
@@ -52,12 +52,8 @@ Se deseja deletar um leitor digite '5'""")
                     bairroLeitor = palavrasMaiuculas(bairroLeitor)
 
                     
-                    enderecoLeitor.append(ruaLeitor)
-                    enderecoLeitor.append(numeroRuaLeitor)
-                    enderecoLeitor.append(bairroLeitor)
-                    
                     c = biblioteca.LeitorCRUD()
-                    c.cadastrarLeitor(nomeLeitor, idadeLeitor, enderecoLeitor)
+                    c.cadastrarLeitor(nomeLeitor, idadeLeitor, ruaLeitor, numeroRuaLeitor, bairroLeitor)
 
                 case '2': #VisualizarLeitor/CONCLUIDO
                     
@@ -66,23 +62,30 @@ Se deseja deletar um leitor digite '5'""")
 
                     
                     c = biblioteca.LeitorCRUD()
-                    print(c.visualizarLeitor(visualizarLeitorNome))
-                
+                    registroLeitor = c.visualizarLeitor(visualizarLeitorNome)
+                    
+                    
+                    
+                    print(f'Nome: {registroLeitor[0]}\nIdade: {registroLeitor[1]}\nRua: {registroLeitor[2]}\nNumero: {registroLeitor[3]}\nBairro: {registroLeitor[4]}')
+                    
                 case '3': #VisualizzarLeitores/CONCLUIDO
                     
                     c = biblioteca.LeitorCRUD()
-                    print(c.visualizarLeitores())
+                    registroGeralLeitor = c.visualizarLeitores()
+                    
+                    for leitor in registroGeralLeitor:
+                        print(f"Nome: {leitor[0]}\nIdade: {leitor[1]}\nRua: {leitor[2]}\nNumero: {leitor[3]}\nBairro: {leitor[4]}\n")
                 
                 case '4': #Atualizar
                     id_nome = input("Digite o nome do leitor que deseja modificar: ")
                     id_nome = palavrasMaiuculas(id_nome)
 
+                    print("Agora pode modificar")
                     nomeAtualizar = input("nome: ")
                     nomeAtualizar = palavrasMaiuculas(nomeAtualizar)
                     
                     idadeAtualizar = input("Idade: ")
 
-                    enderecoAtualizar = []
 
                     ruaAtualizar = input('Sua rua: ')
                     ruaAtualizar = palavrasMaiuculas(ruaAtualizar)
@@ -93,15 +96,9 @@ Se deseja deletar um leitor digite '5'""")
                     bairroAtualizar = palavrasMaiuculas(bairroAtualizar)
 
                     
-                    enderecoAtualizar.append(ruaAtualizar)
-                    enderecoAtualizar.append(numeroRuaAtualizar)
-                    enderecoAtualizar.append(bairroAtualizar)
-
-                    
-
                     c = biblioteca.LeitorCRUD()
-                    res = c.atualizarLeitor(id_nome, nomeAtualizar, idadeAtualizar, enderecoAtualizar)
-                    print(res)
+                    c.atualizarLeitor(id_nome, nomeAtualizar, idadeAtualizar, ruaAtualizar, numeroRuaAtualizar,bairroAtualizar)
+                    
 
                 case '5': #Apagar
                     nomeApagar = input("Digite o nome: ")
@@ -142,20 +139,25 @@ Se deseja deletar um livro digite '5'""")
                     verificarTitulo = input('Digite o titulo do livro: ')
                     verificarTitulo = palavrasMaiuculas(verificarTitulo)
 
-                    verificarAutor = input('Digite o nome do autor')
+                    verificarAutor = input('Digite o nome do autor: ')
                     verificarAutor = palavrasMaiuculas(verificarAutor)
 
                     a = biblioteca.LivroCRUD()
-                    a.visualizarLivro(verificarTitulo, verificarAutor)
+                    registroLivro = a.visualizarLivro(verificarTitulo, verificarAutor)
+                    
+                    print(f"Titulo: {registroLivro[0]}\nAutor: {registroLivro[1]}\nGenero: {registroLivro[2]}\nQuantidade: {registroLivro[3]}")
                     
                 case '3': #VisualizarLivros
                     
                     a = biblioteca.LivroCRUD()
-                    a.visualizarLivros()
+                    registrosGeralLivro = a.visualizarLivros()
+
+                    for livro in registrosGeralLivro:
+                        print(f"Titulo: {livro[0]}\nAutor: {livro[1]}\nGenero: {livro[2]}\nQuantidade: {livro[3]}\n")
                 
                 case '4': #Atualizar
                     id_title = input("Digite o titulo do livro que deseja modificar: ")
-                    id_autor = input(f"Digite o nome do autor de {id_title}")
+                    id_autor = input(f"Digite o nome do autor de {id_title}: ")
 
                     print("Agora para modificar")
                     tituloAtualizar = input("Titulo: ")
@@ -167,8 +169,8 @@ Se deseja deletar um livro digite '5'""")
                     a.atualizarLivro(id_title, id_autor, tituloAtualizar, autorAtualizar, generoAtualizar, quantidadeAtualizar)
 
                 case '5': #Apagar
-                    tituloExcluir = input("titulo: ")
-                    autorExcluir = input("autor: ")
+                    tituloExcluir = input("Titulo: ")
+                    autorExcluir = input("Autor: ")
 
                     a = biblioteca.LivroCRUD()
                     a.excluirLivro(tituloExcluir, autorExcluir)
@@ -177,8 +179,8 @@ Se deseja deletar um livro digite '5'""")
             os.system('cls')
         case '3': #Emprestimo/Devolver
             print("""--------EMPRÉSTIMO--------
-Digite 1 para emprestimo
-Digite 2 para devolver
+Digite '1' para emprestimo
+Digite '2' para devolver
 Digite '3' para visualizar todos os emprestimos
 Digite '4' para visualizar um emprestimo especifico""")
             escolha = input()
@@ -186,36 +188,55 @@ Digite '4' para visualizar um emprestimo especifico""")
             match escolha:
                 case '1': #Emprestimo
                     emprestimoTitulo = input(('Titulo: '))
+                    emprestimoTitulo = palavrasMaiuculas(emprestimoTitulo)
+
                     emprestimoAutor = input(("Autor: "))
+                    emprestimoAutor = palavrasMaiuculas(emprestimoAutor)
+
                     emprestimoNome = input(("Nome: "))
-                                     
+                    emprestimoNome = palavrasMaiuculas(emprestimoNome)                 
 
                     x = biblioteca.EmprestimoCRUD()
                     x.emprestarLivro(emprestimoTitulo, emprestimoAutor, emprestimoNome)
 
                 case '2': #Devolver
-                    nomeDevolver = input("Digite o nome: ")
-                    tituloDevolver = input("Digite o titulo: ")
-                    autorDevolver = input("Digite o autor: ")
+                    nomeDevolver = input("Digite o nome do leitor: ")
+                    nomeDevolver = palavrasMaiuculas(nomeDevolver)
 
+                    tituloDevolver = input("Digite o titulo: ")
+                    tituloDevolver = palavrasMaiuculas(tituloDevolver)
+
+                    autorDevolver = input("Digite o autor: ")
+                    autorDevolver = palavrasMaiuculas(autorDevolver)
+                    
                     x = biblioteca.EmprestimoCRUD()
                     x.devolverLivro(nomeDevolver, tituloDevolver, autorDevolver)
                 
-                case '3': #visualizar
+                case '3': #visualizar todos os emprestimos
                     x = biblioteca.EmprestimoCRUD()
-                    print(x.visualizarEmprestimos())
+                    registroEmprestimos = x.visualizarEmprestimos()
 
-                case '4':
+                    for emprestimo in registroEmprestimos:
+                        print(f"Leitor: {emprestimo[0]}\nTitulo: {emprestimo[1]}\nAutor: {emprestimo[2]}\n")
+
+                case '4': #visualizar um emprestimo
                     nomeVisualizarEmprestimo = input("Digite o nome: ")
+                    nomeVisualizarEmprestimo = palavrasMaiuculas(nomeVisualizarEmprestimo)
+
                     tituloVisualizarEmprestimo = input("Digite o titulo: ")
+                    tituloVisualizarEmprestimo = palavrasMaiuculas(tituloVisualizarEmprestimo)
+
                     autorVisualizarEmprestimo = input("Digite o autor: ")
+                    autorVisualizarEmprestimo = palavrasMaiuculas(autorVisualizarEmprestimo)
 
                     x = biblioteca.EmprestimoCRUD()
-                    print(x.visualizarDetalhesDoLivroEmprestado(nomeVisualizarEmprestimo, tituloVisualizarEmprestimo, autorVisualizarEmprestimo))
+                    registroEmprestimo = x.visualizarDetalhesDoLivroEmprestado(nomeVisualizarEmprestimo, tituloVisualizarEmprestimo, autorVisualizarEmprestimo)
+                    os.system("cls")
+                    print(f"Leitor: {registroEmprestimo[0]}\nTitulo: {registroEmprestimo[1]}\nAutor: {registroEmprestimo[2]}\n")
+
 
             input('Press ENTER to continue...')
             os.system('cls')
             
-
         case '4': #Parar o programa
             break
